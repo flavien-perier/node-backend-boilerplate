@@ -8,8 +8,8 @@ class DatabaseBuilder {
         database.knex.schema.createTableIfNotExists("User", table => {
             this._logger.info("Create database: User");
 
-            table.increments("id");
-            table.string("name");
+            table.index("id").increments();
+            table.string("name").unique();
             table.string("password");
             table.string("password_encryption");
         });

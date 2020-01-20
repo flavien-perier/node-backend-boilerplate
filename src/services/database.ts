@@ -1,4 +1,4 @@
-import knex from "knex";
+import * as knex from "knex";
 import configuration from "./configuration";
 import databaseBuilder from "./databaseBuilder";
 
@@ -11,8 +11,6 @@ class Database {
             connection: configuration.postgresUrl
         });
         this._knex.raw("CURRENT_TIMESTAMP");
-
-        databaseBuilder.build();
     }
 
     public get knex() {

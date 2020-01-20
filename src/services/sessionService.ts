@@ -5,8 +5,8 @@ import UserApi from "../model/api/UserApi";
 import UserSessionApi from "../model/api/UserSessionApi";
 import logger from "./logger";
 
-class UserCache {
-    private _logger = logger("UserCache");
+class SessionService {
+    private _logger = logger("SessionService");
     private _redisClient: redis.RedisClient;
 
     constructor() {
@@ -48,6 +48,6 @@ class UserCache {
     }
 }
 
-const userCache = new UserCache();
+const sessionService = new SessionService();
 
-export default userCache;
+export default sessionService;

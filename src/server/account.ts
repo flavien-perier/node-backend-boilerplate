@@ -1,8 +1,9 @@
 import * as express from "express";
 import server from ".";
 import logger from "../services/logger";
-import userCache from "../services/userCache";
+import sessionService from "../services/sessionService";
 import UserApi from "../model/api/UserApi";
+import accountService from "../services/accountService";
 
 class Account {
     private _logger = logger("Auth");
@@ -11,9 +12,8 @@ class Account {
     constructor() {
         this._router = express.Router();
 
-        this._router.post("/login", (req, res) => {
+        this._router.get("/login", (req, res) => {
             const user = req.body as UserApi;
-            console.log(user)
 
             if (!user.name || !user.password) {
                 this._logger.warn("No username or password");
@@ -21,19 +21,34 @@ class Account {
                 return res.status(401).end();
             }
 
-            if (user.name != "user" || user.password != "password") {
+            if (accountService.authentification(user.name, user.password)) {
                 this._logger.warn(`Invalid username or password: "${user.name}"`);
                 res.statusMessage = "Invalid username or password";
                 return res.status(401).end();
             }
 
             res.json({
-                token: userCache.createSession(user)
+                token: sessionService.createSession(user)
             });
         });
 
-        this._router.post("/create", (req, res) => {
+        this._router.post("/", async (req, res) => {
+            const user = req.body as UserApi;
 
+            if (!user.name || !user.password) {
+                this._logger.warn("No username or password");
+                res.statusMessage = "No username or password";
+                return res.status(401).end();
+            }
+
+            try {
+                await accountService.createAccount(user.name, user.password);
+                res.status(201).end();
+            } catch (err) {
+                this._logger.warn(err);
+                res.statusMessage = err;
+                return res.status(401).end();
+            }
         });
     }
 

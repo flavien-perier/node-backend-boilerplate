@@ -2,7 +2,7 @@ FROM node:lts-alpine
 
 LABEL maintainer="Flavien PERIER <perier@flavien.cc>"
 LABEL version="1.0"
-LABEL description="node-backend-boilerplate Dockerfile"
+LABEL description="NodeJs backend"
 
 WORKDIR /app
 COPY . .

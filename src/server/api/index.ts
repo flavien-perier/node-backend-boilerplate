@@ -1,7 +1,7 @@
 import * as express from "express";
 import server from "..";
 import logger from "../../services/logger";
-import userCache from "../../services/userCache";
+import sessionService from "../../services/sessionService";
 
 class Api {
     private _logger = logger("Api");
@@ -29,7 +29,7 @@ class Api {
 
             const bearer = bearerPattern[1];
 
-            userCache.loadSession(bearer).then(() => {
+            sessionService.loadSession(bearer).then(() => {
                 next();
             }).catch(err => {
                 this._logger.warn("The bearer does not exist.");
