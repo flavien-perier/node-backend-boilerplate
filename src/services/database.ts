@@ -1,6 +1,5 @@
 import * as knex from "knex";
 import configuration from "./configuration";
-import databaseBuilder from "./databaseBuilder";
 
 class Database {
     private _knex: knex;
