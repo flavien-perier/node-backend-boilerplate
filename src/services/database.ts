@@ -1,13 +1,26 @@
 import * as knex from "knex";
 import configuration from "./configuration";
+import logger from "./logger";
 
 class Database {
     private _knex: knex;
+    private _logger = logger("Database");
 
     constructor() {
         this._knex  = knex({
             client: "pg",
-            connection: configuration.postgresUrl
+            connection: configuration.postgresUrl,
+            log: {
+                warn: message => {
+                    this._logger.warn(message);
+                },
+                error: message => {
+                    this._logger.error(message);
+                },
+                debug: message => {
+                    this._logger.debug(message);
+                }
+            }
         });
         this._knex.raw("CURRENT_TIMESTAMP");
     }

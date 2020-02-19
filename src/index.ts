@@ -3,9 +3,13 @@ import account from "./server/account";
 import api from "./server/api";
 import databaseBuilder from "./services/databaseBuilder";
 
-databaseBuilder.build();
+async function main() {
+    await databaseBuilder.build();
+    
+    account.load();
+    api.load();
+    
+    server.start();
+}
 
-account.load();
-api.load();
-
-server.start();
+main();

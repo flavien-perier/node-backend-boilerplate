@@ -19,7 +19,7 @@ class UserRepository {
                     }
                 })
                 .catch(error => {
-                    this._logger.alert("Database error");
+                    this._logger.alert("Database error", {error: error.message});
                     reject("Database error");
                 });
         });
@@ -37,24 +37,27 @@ class UserRepository {
                         this._logger.error(`No user Found with name: ${name}`);
                         resolve(null);
                     }
-                })
-                .catch(error => {
-                    this._logger.alert("Database error");
+                }).catch(error => {
+                    this._logger.alert("Database error", {error: error.message});
                     reject("Database error");
                 });
         });
     }
 
     public createUser(name: string, password: string, passwordEncryption: string) {
-        database.knex.insert({
+        database.knex.from("User").insert({
             name,
             password,
-            passwordEncryption
-        }).from("User");
+            password_encryption: passwordEncryption
+        }).catch(error => {
+            this._logger.alert("Database error", {error: error.message});
+        });
     }
 
     public deleteUserById(id: number) {
-        database.knex.delete().from("User").where({id});
+        database.knex.delete().from("User").where({id}).catch(error => {
+            this._logger.alert("Database error", {error: error.message});
+        });
     }
 }
 
