@@ -1,4 +1,4 @@
-export default class UserApi {
+export default class UserDto {
     constructor(
         public name: string,
         public password: string

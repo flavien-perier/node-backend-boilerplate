@@ -1,8 +1,8 @@
 import * as redis from "redis";
 import * as crypto from "crypto";
 import configuration from "./configuration";
-import UserApi from "../model/api/UserApi";
-import UserSessionApi from "../model/api/UserSessionApi";
+import UserDto from "../model/dto/UserDto";
+import UserSessionDto from "../model/dto/UserSessionDto";
 import logger from "./logger";
 
 class SessionService {
@@ -15,18 +15,18 @@ class SessionService {
         });
     }
 
-    public createSession(user: UserApi) {
+    public createSession(user: UserDto) {
         const token = crypto.createHmac("sha512", configuration.salt)
                             .update(user.name + user.password + new Date().getTime() + (Math.random()))
                             .digest("hex");
         
-        const userSession = new UserSessionApi(user.name);
+        const userSession = new UserSessionDto(user.name);
         this._redisClient.set(token, JSON.stringify(userSession), "EX", 1800);
         this._logger.debug(`Associates the "${user.name}" user with the token "${token}".`);
         return token;
     }
 
-    public loadSession(token: string): Promise<UserSessionApi> {
+    public loadSession(token: string): Promise<UserSessionDto> {
         return new Promise((resolve, reject) => {
             this._redisClient.get(token, (error, reply) => {
                 if (error) {
@@ -36,7 +36,7 @@ class SessionService {
                 }
 
                 if (reply) {
-                    const userSession = JSON.parse(reply) as UserSessionApi;
+                    const userSession = JSON.parse(reply) as UserSessionDto;
                     this._logger.debug(`The "${userSession.name}" user has logged in with token "${token}".`);
                     resolve(userSession);
                 } else {

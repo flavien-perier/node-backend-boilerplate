@@ -2,7 +2,7 @@ import * as express from "express";
 import server from ".";
 import logger from "../services/logger";
 import sessionService from "../services/sessionService";
-import UserApi from "../model/api/UserApi";
+import UserDto from "../model/dto/UserDto";
 import accountService from "../services/accountService";
 
 class Account {
@@ -13,7 +13,7 @@ class Account {
         this._router = express.Router();
 
         this._router.get("/login", (req, res) => {
-            const user = req.body as UserApi;
+            const user = req.body as UserDto;
 
             if (!user.name || !user.password) {
                 this._logger.warn("No username or password");
@@ -33,7 +33,7 @@ class Account {
         });
 
         this._router.post("/", async (req, res) => {
-            const user = req.body as UserApi;
+            const user = req.body as UserDto;
 
             if (!user.name || !user.password) {
                 this._logger.warn("No username or password");
