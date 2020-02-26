@@ -2,7 +2,7 @@
   "name": "node-backend-boilerplate",
   "version": "1.0.0",
   "description": "NodeJs backend",
-  "author": "Flavien PERIER <perier@flavien.cc>",
+  "author": "Flavien PERIER <perier@flavien.io>",
   "license": "MIT",
   "scripts": {
     "build": "tsc",
