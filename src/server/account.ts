@@ -21,7 +21,7 @@ class Account {
                 return res.status(401).end();
             }
 
-            if (accountService.authentification(user.name, user.password)) {
+            if (!accountService.authentification(user.name, user.password)) {
                 this._logger.warn(`Invalid username or password: "${user.name}"`);
                 res.statusMessage = "Invalid username or password";
                 return res.status(401).end();

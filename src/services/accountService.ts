@@ -19,7 +19,7 @@ class AccountService {
         }
 
         this._logger.warn(`The user "${username}" already exists`);
-        throw `The user "${username}" already exists`;
+        throw "The user already exists";
     }
 
     public async authentification(username: string, password: string) {
@@ -28,7 +28,7 @@ class AccountService {
         if (user != null) {
             const hashedPassword = this.hashPassword(password);
 
-            if (user.password == hashedPassword) {
+            if (user.password === hashedPassword) {
                 return true;
             }
             return false;
