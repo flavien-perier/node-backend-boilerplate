@@ -13,7 +13,9 @@ class Account {
         this._router = express.Router();
 
         this._router.get("/login", (req, res) => {
-            const user = req.body as UserDto;
+            const b64auth = (req.headers.authorization || "").split(" ")[1] || "";
+            const [userName, password] = Buffer.from(b64auth, "base64").toString().split(":");
+            const user = new UserDto(userName, password);
 
             if (!user.name || !user.password) {
                 this._logger.warn("No username or password");

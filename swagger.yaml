@@ -1,14 +1,14 @@
 openapi: 3.0.1
 info:
+  version: 1.0.0
   title: Node Backend Boilerplate
-  description: Node Backend Boilerplate
+  description: NodeJs backend
   termsOfService: https://github.com/flavien-perier/nodeBackendBoilerplate/blob/master/LICENSE
   contact:
     email: perier@flavien.io
   license:
     name: MIT
     url: https://github.com/flavien-perier/nodeBackendBoilerplate/blob/master/LICENSE
-  version: 1.0.0
 
 externalDocs:
   description: Readme
@@ -80,7 +80,6 @@ paths:
       security:
       - bearer: []
 
-  
 components:
   schemas:
     User:

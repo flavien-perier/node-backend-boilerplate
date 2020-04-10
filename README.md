@@ -53,12 +53,8 @@ curl --request POST \
 ```bash
 curl --request GET \
   --url http://127.0.0.1:8080/account/login \
-  --header 'authorization: Basic Og==' \
-  --header 'content-type: application/json' \
-  --data '{
-        "name": "user",
-        "password": "password"
-    }'
+  --header 'authorization: Basic ZmxhdmllbjpwYXNzd29yZA==' \
+  --header 'content-type: application/json'
 ```
 
 - Test app:

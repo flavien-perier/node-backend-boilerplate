@@ -1,6 +1,6 @@
 {
-  "name": "node-backend-boilerplate",
   "version": "1.0.0",
+  "name": "node-backend-boilerplate",
   "description": "NodeJs backend",
   "author": "Flavien PERIER <perier@flavien.io>",
   "license": "MIT",

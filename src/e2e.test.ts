@@ -53,6 +53,7 @@ describe("e2e tests", () => {
                 supertest(server.app)
                     .get("/account/login")
                     .send(JSON.stringify({"name": USER_NAME, "password": PASSWORD}))
+                    .set("authorization", `Basic ${Buffer.from(USER_NAME + ":" + PASSWORD).toString("base64")}`)
                     .set("Content-Type", "application/json")
                     .expect(200)
                     .end((err, res) => {
@@ -63,7 +64,6 @@ describe("e2e tests", () => {
 
                         supertest(server.app)
                             .get("/api/ping")
-                            .send(JSON.stringify({"name": USER_NAME, "password": PASSWORD}))
                             .set("Content-Type", "application/json")
                             .set("Authorization", `Bearer ${token}`)
                             .expect(200)
