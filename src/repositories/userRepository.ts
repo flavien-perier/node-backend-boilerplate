@@ -17,10 +17,6 @@ class UserRepository {
                         this._logger.error(`No user Found with id: ${id}`);
                         resolve(null);
                     }
-                })
-                .catch(error => {
-                    this._logger.alert("Database error", {error: error.message});
-                    reject("Database error");
                 });
         });
     }
@@ -37,9 +33,6 @@ class UserRepository {
                         this._logger.error(`No user Found with name: ${name}`);
                         resolve(null);
                     }
-                }).catch(error => {
-                    this._logger.alert("Database error", {error: error.message});
-                    reject("Database error");
                 });
         });
     }
@@ -49,15 +42,15 @@ class UserRepository {
             name,
             password,
             password_encryption: passwordEncryption
-        }).catch(error => {
-            this._logger.alert("Database error", {error: error.message});
         });
     }
 
     public deleteUserById(id: number) {
-        database.knex.delete().from("User").where({id}).catch(error => {
-            this._logger.alert("Database error", {error: error.message});
-        });
+        database.knex.delete().from("User").where({id});
+    }
+
+    public deleteUserByName(name: string) {
+        database.knex.delete().from("User").where({name});
     }
 }
 

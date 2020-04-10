@@ -17,7 +17,8 @@ npm run build
 Start tests:
 
 ```bash
-npm test
+docker-compose up -d
+docker logs -f app-test
 ```
 
 Start project:

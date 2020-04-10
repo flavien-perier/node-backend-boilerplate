@@ -1,4 +1,4 @@
-FROM node:lts-alpine
+FROM node:lts-alpine as builder
 
 LABEL maintainer="Flavien PERIER <perier@flavien.io>"
 LABEL version="1.0"
