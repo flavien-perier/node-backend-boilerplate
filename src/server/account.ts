@@ -18,7 +18,7 @@ class Account {
             if (!user.name || !user.password) {
                 this._logger.warn("No username or password");
                 res.statusMessage = "No username or password";
-                return res.status(401).end();
+                return res.status(400).end();
             }
 
             if (!accountService.authentification(user.name, user.password)) {
@@ -38,7 +38,7 @@ class Account {
             if (!user.name || !user.password) {
                 this._logger.warn("No username or password");
                 res.statusMessage = "No username or password";
-                return res.status(401).end();
+                return res.status(400).end();
             }
 
             try {

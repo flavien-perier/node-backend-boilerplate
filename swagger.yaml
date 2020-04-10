@@ -1,0 +1,125 @@
+openapi: 3.0.1
+info:
+  title: Node Backend Boilerplate
+  description: Node Backend Boilerplate
+  termsOfService: https://github.com/flavien-perier/nodeBackendBoilerplate/blob/master/LICENSE
+  contact:
+    email: perier@flavien.io
+  license:
+    name: MIT
+    url: https://github.com/flavien-perier/nodeBackendBoilerplate/blob/master/LICENSE
+  version: 1.0.0
+
+externalDocs:
+  description: Readme
+  url: https://github.com/flavien-perier/nodeBackendBoilerplate/blob/master/README.md
+
+servers:
+- url: http://127.0.0.1:8080/
+
+tags:
+- name: Account
+  description: User management
+- name: Api
+  description: Application
+
+paths:
+  /account:
+    post:
+      tags:
+      - Account
+      summary: Create a user
+      requestBody:
+        description: User information on account creation
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      responses:
+        201:
+          description: Created
+          content: {}
+        401:
+          description: The user already exists
+          content: {}
+      security:
+      - client: []
+        
+  /account/login:
+    get:
+      tags:
+      - Account
+      summary: Authentification
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Token'
+        400:
+          description: No username or password
+        401:
+          description: Invalid username or password
+          
+  /api/ping:
+    get:
+      tags:
+      - Api
+      summary: Authentification
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Ping'
+        401:
+          description: No authorization
+      security:
+      - bearer: []
+
+  
+components:
+  schemas:
+    User:
+      type: object
+      required:
+      - name
+      - password
+      properties:
+        name:
+          type: string
+          description: User name
+        password:
+          type: string
+          description: User password
+          
+    Token:
+      type: object
+      required:
+      - token
+      properties:
+        token:
+          type: string
+          description: User authentication token
+          
+    Ping:
+      type: object
+      required:
+      - ping
+      properties:
+        ping:
+          type: string
+          enum:
+          - pong
+
+  securitySchemes:
+    client:
+      type: http
+      scheme: basic
+  
+    bearer:
+      type: http
+      scheme: bearer
