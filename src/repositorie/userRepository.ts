@@ -1,56 +1,63 @@
 import database from "../service/database";
 import logger from "../service/logger";
 import UserOrm from "../model/orm/UserOrm";
+import HttpNotFoundError from "../error/HttpNotFoundError";
 
 class UserRepository {
     private _logger = logger("UserRepository");
     
-    public findUserById(id: number): Promise<UserOrm> {
-        return new Promise((resolve, reject) => {
-            database.knex.select("id", "name", "password")
-                .from("User")
-                .where({id})
-                .then(users => {
-                    if (users.length == 1) {
-                        resolve(users[0] as UserOrm);
-                    } else {
-                        this._logger.warn(`No user Found with id: ${id}`);
-                        resolve(null);
-                    }
-                });
-        });
+    public async findUserById(id: number): Promise<UserOrm> {
+        const users = await database.knex.select("id", "name", "password").from("User").where({id}) as UserOrm[];
+
+        if (users.length == 1) {
+            return users[0];
+        }
+        
+        this._logger.warn(`No user found with id: ${id}`);
+        throw new HttpNotFoundError("User not found");
     }
 
-    public findUserByName(name: string): Promise<UserOrm> {
-        return new Promise((resolve, reject) => {
-            database.knex.select("id", "name", "password")
-                .from("User")
-                .where({name})
-                .then(users => {
-                    if (users.length == 1) {
-                        resolve(users[0] as UserOrm);
-                    } else {
-                        this._logger.warn(`No user Found with name: ${name}`);
-                        resolve(null);
-                    }
-                });
-        });
+    public async findUserByName(name: string): Promise<UserOrm> {
+        const users = await database.knex.select("id", "name", "password").from("User").where({name}) as UserOrm[];
+
+        if (users.length == 1) {
+            return users[0];
+        }
+        
+        this._logger.warn(`No user found with name: ${name}`);
+        throw new HttpNotFoundError("User not found");
     }
 
-    public createUser(name: string, password: string, passwordEncryption: string) {
-        database.knex.from("User").insert({
+    public async userExistsById(id: number): Promise<boolean> {
+        const users = await database.knex.select("id", "name", "password").from("User").where({id}) as UserOrm[];
+        if (users.length == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public async userExistsByName(name: string): Promise<boolean> {
+        const users = await database.knex.select("id", "name", "password").from("User").where({name}) as UserOrm[];
+        if (users.length == 1) {
+            return true;
+        }
+        return false;
+    }
+
+    public async createUser(name: string, password: string, passwordEncryption: string): Promise<any> {
+        return await database.knex.from("User").insert({
             name,
             password,
             password_encryption: passwordEncryption
         });
     }
 
-    public deleteUserById(id: number) {
-        database.knex.delete().from("User").where({id});
+    public async deleteUserById(id: number): Promise<any> {
+        return await database.knex.delete().from("User").where({id});
     }
 
-    public deleteUserByName(name: string) {
-        database.knex.delete().from("User").where({name});
+    public async deleteUserByName(name: string): Promise<any> {
+        return await database.knex.delete().from("User").where({name});
     }
 }
 

@@ -36,6 +36,7 @@ describe("e2e tests", () => {
             .set("Content-Type", "application/json")
             .expect(201)
             .end((err, res) => {
+                console.log(err)
                 expect(err).toBeNull();
                 done();
             });
@@ -60,10 +61,13 @@ describe("e2e tests", () => {
                         expect(err).toBeNull();
                         expect(res.body.token).toMatch(/^[0-9a-z]{64,512}$/);
 
+                        const token = res.body.token;
+                        console.log(token)
+
                         supertest(server.app)
                             .get("/api/ping")
                             .set("Content-Type", "application/json")
-                            .set("Authorization", `Bearer ${res.body.token}`)
+                            .set("Authorization", `Bearer ${token}`)
                             .expect(200)
                             .end((err, res) => {
                                 expect(err).toBeNull();

@@ -43,8 +43,6 @@ paths:
         401:
           description: The user already exists
           content: {}
-      security:
-      - client: []
         
   /account/login:
     get:
@@ -62,6 +60,8 @@ paths:
           description: No username or password
         401:
           description: Invalid username or password
+      security:
+      - client: []
           
   /api/ping:
     get:

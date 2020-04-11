@@ -7,8 +7,8 @@
   "scripts": {
     "build": "tsc",
     "start": "node dist/index.js",
-    "test": "nodemon -e ts,json --exec 'ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json'",
-    "dev": "nodemon src/index.ts --exec ts-node"
+    "test": "nodemon -e ts,json,yaml,yml --exec 'ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json'",
+    "dev": "nodemon -e ts,json,yaml,yml src/index.ts --exec ts-node"
   },
   "dependencies": {
     "body-parser": "^1.19.0",

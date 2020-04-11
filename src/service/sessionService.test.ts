@@ -1,5 +1,6 @@
 import sessionService from "./sessionService";
 import UserDto from "../model/dto/UserDto";
+import HttpUnauthorizedError from "../error/HttpUnauthorizedError";
 
 describe("sessionService", () => {
     it("should save and load session", (done) => {
@@ -14,7 +15,8 @@ describe("sessionService", () => {
 
     it("should dont load session with bad token", (done) => {
         sessionService.loadSession("badToken").catch(err => {
-            expect(err).toEqual("Invalid token");
+            expect(err).toBeInstanceOf(HttpUnauthorizedError);
+            expect(err.message).toEqual("Invalid token");
             done();
         });
     });

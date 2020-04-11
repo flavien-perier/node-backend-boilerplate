@@ -4,6 +4,8 @@ import configuration from "./configuration";
 import UserDto from "../model/dto/UserDto";
 import UserSessionDto from "../model/dto/UserSessionDto";
 import logger from "./logger";
+import HttpInternalServerError from "../error/HttpInternalServerError";
+import HttpUnauthorizedError from "../error/HttpUnauthorizedError";
 
 class SessionService {
     private _logger = logger("SessionService");
@@ -31,7 +33,7 @@ class SessionService {
             this._redisClient.get(token, (error, reply) => {
                 if (error) {
                     this._logger.alert(`Fatal error with redis database. (${error.message}).`);
-                    reject(error.message);
+                    reject(new HttpInternalServerError("Redis error"));
                     return;
                 }
 
@@ -41,7 +43,7 @@ class SessionService {
                     resolve(userSession);
                 } else {
                     this._logger.warn(`Invalid token: "${token}".`);
-                    reject("Invalid token");
+                    reject(new HttpUnauthorizedError("Invalid token"));
                 }
             });
         });

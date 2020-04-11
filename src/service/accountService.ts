@@ -2,27 +2,25 @@ import * as crypto from "crypto";
 import userRepository from "../repositorie/userRepository";
 import configuration from "./configuration";
 import logger from "./logger";
+import HttpForbidenError from "../error/HttpForbidenError";
 
 class AccountService {
     private _logger = logger("SessionService");
-
-    public async createAccount(username: string, password: string) {
-        const user = await userRepository.findUserByName(username);
-
-        if (user == null) {
+    public async createAccount(username: string, password: string): Promise<void> {
+        if (!await userRepository.userExistsByName(username)) {
             const hashedPassword = this.hashPassword(password);
 
-            userRepository.createUser(username, hashedPassword, "sha512");
-            const user = await userRepository.findUserByName(username);
+            await userRepository.createUser(username, hashedPassword, "sha512");
 
-            return user;
+            this._logger.info(`The user "${username}" has been created`);
+            return null;
         }
 
         this._logger.warn(`The user "${username}" already exists`);
-        throw "The user already exists";
+        throw new HttpForbidenError("User already exists");
     }
 
-    public async authentification(username: string, password: string) {
+    public async authentification(username: string, password: string): Promise<boolean> {
         const user = await userRepository.findUserByName(username);
 
         if (user != null) {
@@ -38,7 +36,7 @@ class AccountService {
         return false;
     }
 
-    private hashPassword(password: string) {
+    private hashPassword(password: string): string {
         return crypto.createHmac("sha512", configuration.salt)
                     .update(password)
                     .digest("hex");

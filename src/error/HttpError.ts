@@ -1,14 +1,16 @@
 import { Response } from "express";
 
 export default abstract class HttpError extends Error {
-    constructor(message: string) {
-        super(message)
+    constructor(
+        private statusMessage: string
+    ) {
+        super(statusMessage)
     }
 
-    public abstract get statusCode(): number;
+    protected abstract get statusCode(): number;
 
     public apply(res: Response) {
-        res.statusMessage = this.message;
+        res.statusMessage = this.statusMessage;
         res.status(this.statusCode).end();
     }
 }
