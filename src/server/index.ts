@@ -9,6 +9,7 @@ import * as yaml from "js-yaml";
 import * as fs from "fs";
 import HttpError from "../error/HttpError";
 import HttpInternalServerError from "../error/HttpInternalServerError";
+import HttpNotFoundError from "../error/HttpNotFoundError";
 
 class Server {
     private _logger = logger("Server");
@@ -21,12 +22,7 @@ class Server {
         this._app.use(bodyParser.json());
         this._app.use(helmet());
 
-        /* new OpenApiValidator({
-            apiSpec: yaml.safeLoad(fs.readFileSync("swagger.yaml", "utf8")),
-            validateRequests: true,
-            validateResponses: true
-        }).install(this._app); */
-
+        // log request
         this._app.use((req, res, next) => {
             const ip = req.headers["x-real-ip"] || req.connection.remoteAddress;
             const userAgent = req.get("User-Agent");
@@ -36,6 +32,12 @@ class Server {
             this._logger.http(`${method}: ${url}`, {ip, userAgent, method, url});
             next();
         });
+
+        new OpenApiValidator({
+            apiSpec: yaml.safeLoad(fs.readFileSync("swagger.yaml", "utf8")),
+            validateRequests: true,
+            validateResponses: true
+        }).install(this._app);
     }
 
     public get app() {
@@ -48,15 +50,21 @@ class Server {
     }
 
     public start() {
+        // default response
+        this._app.use((req, res, next) => {
+            next(new HttpNotFoundError("Not found"));
+        });
+
+        // error catching
         this._app.use((err, req, res, next) => {
             if (err instanceof HttpError) {
                 err.apply(res);
             } else {
-                this._logger.error("Internal server error");
+                this._logger.error("Internal server error", {errorMessage: err.message || err});
                 new HttpInternalServerError("Internal server error").apply(res);
             }
         });
-
+ 
         this._server = this._app.listen(configuration.port, () => {
             this._logger.info(`Application start on port ${configuration.port}`);
         });

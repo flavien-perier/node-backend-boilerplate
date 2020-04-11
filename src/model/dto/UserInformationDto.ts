@@ -1,4 +1,4 @@
-export default class UserSessionDto {
+export default class UserDto {
     constructor(
         public name: string
     ) {}

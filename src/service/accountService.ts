@@ -3,17 +3,22 @@ import userRepository from "../repositorie/userRepository";
 import configuration from "./configuration";
 import logger from "./logger";
 import HttpForbidenError from "../error/HttpForbidenError";
+import UserInformationDto from "../model/dto/UserInformationDto";
+import userOrmMapper from "../model/mapper/userOrmMapper"
 
 class AccountService {
     private _logger = logger("SessionService");
-    public async createAccount(username: string, password: string): Promise<void> {
+    public async createAccount(username: string, password: string): Promise<UserInformationDto> {
         if (!await userRepository.userExistsByName(username)) {
             const hashedPassword = this.hashPassword(password);
 
             await userRepository.createUser(username, hashedPassword, "sha512");
 
             this._logger.info(`The user "${username}" has been created`);
-            return null;
+
+            const userOrm = await userRepository.findUserByName(username)
+
+            return userOrmMapper.userOrmToUserInformationDto(userOrm);
         }
 
         this._logger.warn(`The user "${username}" already exists`);

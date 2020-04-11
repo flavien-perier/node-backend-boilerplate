@@ -10,7 +10,7 @@ class Api extends Router {
     constructor() {
         super();
 
-        this.router.use((req, res, next) => {
+        this.router.use(async (req, res, next) => {
             const { authorization } = req.headers;
 
             if (!authorization) {
@@ -28,13 +28,8 @@ class Api extends Router {
 
             const bearer = bearerPattern[1];
 
-            sessionService.loadSession(bearer).then(() => {
-                next();
-            }).catch(err => {
-                this._logger.warn("The bearer does not exist");
-                res.statusMessage = "Bad bearer";
-                return res.status(403).end();
-            });
+            await sessionService.loadSession(bearer);
+            next();
         });
 
         this.router.get("/ping", (req, res) => {

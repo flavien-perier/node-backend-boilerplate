@@ -6,8 +6,8 @@ describe("sessionService", () => {
     it("should save and load session", (done) => {
         const user = new UserDto("name", "password");
         
-        const token = sessionService.createSession(user);
-        sessionService.loadSession(token).then(userSession => {
+        const tokenDto = sessionService.createSession(user);
+        sessionService.loadSession(tokenDto.token).then(userSession => {
             expect(userSession.name).toEqual("name");
             done();
         });

@@ -29,9 +29,7 @@ class Account extends Router {
                     throw new HttpUnauthorizedError("Bad password")
                 }
 
-                res.json({
-                    token: sessionService.createSession(user)
-                });
+                res.json(sessionService.createSession(user));
             } catch (err) {
                 next(err);
             }
@@ -45,9 +43,8 @@ class Account extends Router {
                     this._logger.warn("No username or password");
                     throw new HttpBadRequestError("No username or password");
                 }
-    
-                await accountService.createAccount(user.name, user.password);
-                res.status(201).json();
+
+                res.status(201).json(await accountService.createAccount(user.name, user.password));
             } catch(err) {
                 next(err);
             }
