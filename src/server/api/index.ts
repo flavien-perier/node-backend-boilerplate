@@ -2,7 +2,6 @@ import server from "..";
 import logger from "../../service/logger";
 import sessionService from "../../service/sessionService";
 import Router from "../Router";
-import HttpUnauthorizedError from "../../error/HttpUnauthorizedError";
 
 class Api extends Router {
     private _logger = logger("Api");

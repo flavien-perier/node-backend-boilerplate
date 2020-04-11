@@ -62,6 +62,7 @@ class Server {
             if (err instanceof HttpError) {
                 err.apply(res);
             } else if (err.status && err.message && err.errors) {
+                this._logger.warn("Swagger compliance issue", {error: err.message});
                 res.status(err.status).json(new BadRequestInformations(err.message, err.errors));
             } else {
                 this._logger.error("Internal server error", {errorMessage: err.message || err});

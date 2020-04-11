@@ -1,5 +1,4 @@
 import * as express from "express";
-import HttpError from "../error/HttpError";
 
 export default abstract class Router {
     private _router: express.Router;
