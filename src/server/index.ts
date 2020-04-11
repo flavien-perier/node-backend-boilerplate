@@ -10,6 +10,7 @@ import * as fs from "fs";
 import HttpError from "../error/HttpError";
 import HttpInternalServerError from "../error/HttpInternalServerError";
 import HttpNotFoundError from "../error/HttpNotFoundError";
+import BadRequestInformations from "../model/BadRequestInformations";
 
 class Server {
     private _logger = logger("Server");
@@ -36,7 +37,8 @@ class Server {
         new OpenApiValidator({
             apiSpec: yaml.safeLoad(fs.readFileSync("swagger.yaml", "utf8")),
             validateRequests: true,
-            validateResponses: true
+            validateResponses: true,
+            validateSecurity: true
         }).install(this._app);
     }
 
@@ -59,6 +61,8 @@ class Server {
         this._app.use((err, req, res, next) => {
             if (err instanceof HttpError) {
                 err.apply(res);
+            } else if (err.status && err.message && err.errors) {
+                res.status(err.status).json(new BadRequestInformations(err.message, err.errors));
             } else {
                 this._logger.error("Internal server error", {errorMessage: err.message || err});
                 new HttpInternalServerError("Internal server error").apply(res);

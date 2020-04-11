@@ -43,6 +43,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserInformation'
+        400:
+          description: Bad request
         403:
           description: Forbidden
           content: {}
@@ -78,6 +80,8 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Ping'
+        400:
+          description: Bad request
         401:
           description: Unauthorized
       security:

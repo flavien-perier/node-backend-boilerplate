@@ -32,16 +32,13 @@ class SessionService {
     public loadSession(token: string): Promise<UserSession> {
         return new Promise((resolve, reject) => {
             this._redisClient.get(token, (error, reply) => {
-                if (error) {
-                    this._logger.alert(`Fatal error with redis database. (${error.message}).`);
-                    reject(new HttpInternalServerError("Redis error"));
-                    return;
-                }
-
                 if (reply) {
                     const userSession = JSON.parse(reply) as UserSession;
                     this._logger.debug(`The "${userSession.name}" user has logged in with token "${token}".`);
                     resolve(userSession);
+                } else if (error) {
+                    this._logger.alert(`Fatal error with redis database. (${error.message}).`);
+                    reject(new HttpInternalServerError("Redis error"));
                 } else {
                     this._logger.warn(`Invalid token: "${token}".`);
                     reject(new HttpUnauthorizedError("Invalid token"));

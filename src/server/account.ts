@@ -4,7 +4,6 @@ import sessionService from "../service/sessionService";
 import UserDto from "../model/dto/UserDto";
 import accountService from "../service/accountService";
 import HttpUnauthorizedError from "../error/HttpUnauthorizedError";
-import HttpBadRequestError from "../error/HttpBadRequestError";
 import Router from "./Router";
 
 class Account extends Router {
@@ -15,18 +14,13 @@ class Account extends Router {
 
         this.router.get("/login", async (req, res, next) => {
             try {
-                const b64auth = (req.headers.authorization || "").split(" ")[1] || "";
-                const [userName, password] = Buffer.from(b64auth, "base64").toString().split(":");
+                const basicToken = /^Basic ?(.*)$/i.exec(req.headers.authorization)[1];
+                const [userName, password] = Buffer.from(basicToken, "base64").toString().split(":");
                 const user = new UserDto(userName, password);
-
-                if (!user.name || !user.password) {
-                    this._logger.warn("No username or password");
-                    throw new HttpBadRequestError("No username or password");
-                }
 
                 if (!await accountService.authentification(user.name, user.password)) {
                     this._logger.warn(`Bad password for the user: "${user.name}"`);
-                    throw new HttpUnauthorizedError("Bad password")
+                    throw new HttpUnauthorizedError("Bad password");
                 }
 
                 res.json(sessionService.createSession(user));
@@ -38,14 +32,8 @@ class Account extends Router {
         this.router.post("/", async (req, res, next) => {
             try {
                 const user = req.body as UserDto;
-    
-                if (!user.name || !user.password) {
-                    this._logger.warn("No username or password");
-                    throw new HttpBadRequestError("No username or password");
-                }
-
                 res.status(201).json(await accountService.createAccount(user.name, user.password));
-            } catch(err) {
+            } catch(err) { 
                 next(err);
             }
         });

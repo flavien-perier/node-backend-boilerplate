@@ -11,25 +11,13 @@ class Api extends Router {
         super();
 
         this.router.use(async (req, res, next) => {
-            const { authorization } = req.headers;
-
-            if (!authorization) {
-                this._logger.warn("Connection attempt without authorization");
-                throw new HttpUnauthorizedError("No authorization");
+            try {
+                const bearerToken = /^Bearer ?(.*)$/i.exec(req.headers.authorization)[1];
+                await sessionService.loadSession(bearerToken);
+                next();
+            } catch (err) {
+                next(err);
             }
-
-            const bearerPattern = /^Bearer (.*)$/.exec(authorization);
-
-            if (!bearerPattern) {
-                this._logger.warn("Attempt to connect with bad bearer");
-                res.statusMessage = "Bad bearer";
-                return res.status(403).end();
-            }
-
-            const bearer = bearerPattern[1];
-
-            await sessionService.loadSession(bearer);
-            next();
         });
 
         this.router.get("/ping", (req, res) => {

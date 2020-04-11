@@ -2,9 +2,9 @@ import { Response } from "express";
 
 export default abstract class HttpError extends Error {
     constructor(
-        private statusMessage: string
+        protected statusMessage: string
     ) {
-        super(statusMessage)
+        super(statusMessage);
     }
 
     protected abstract get statusCode(): number;
