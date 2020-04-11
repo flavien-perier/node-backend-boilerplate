@@ -1,9 +1,12 @@
+import { OpenApiValidator } from "express-openapi-validator";
+import configuration from "../service/configuration";
+import logger from "../service/logger";
 import * as express from "express";
 import * as bodyParser from "body-parser";
 import * as helmet from "helmet";
-import configuration from "../services/configuration";
-import logger from "../services/logger";
 import * as http from "http";
+import * as yaml from "js-yaml";
+import * as fs from "fs";
 
 class Server {
     private _logger = logger("Server");
@@ -16,10 +19,10 @@ class Server {
         this._app.use(bodyParser.json());
         this._app.use(helmet());
 
-        this.app.use((req, res, next) => {
-            res.set("User-Agent", "application/json");
-            next();
-        });
+        /*new OpenApiValidator({
+            apiSpec: yaml.safeLoad(fs.readFileSync("swagger.yaml", "utf8")),
+            validateResponses: true
+        }).install(this._app);*/
 
         this._app.use((req, res, next) => {
             const ip = req.headers["x-real-ip"] || req.connection.remoteAddress;

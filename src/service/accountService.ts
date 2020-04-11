@@ -1,5 +1,5 @@
 import * as crypto from "crypto";
-import userRepository from "../repositories/userRepository";
+import userRepository from "../repositorie/userRepository";
 import configuration from "./configuration";
 import logger from "./logger";
 

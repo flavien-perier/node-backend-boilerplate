@@ -1,7 +1,7 @@
 import * as express from "express";
 import server from "..";
-import logger from "../../services/logger";
-import sessionService from "../../services/sessionService";
+import logger from "../../service/logger";
+import sessionService from "../../service/sessionService";
 
 class Api {
     private _logger = logger("Api");

@@ -1,9 +1,9 @@
 import * as express from "express";
 import server from ".";
-import logger from "../services/logger";
-import sessionService from "../services/sessionService";
+import logger from "../service/logger";
+import sessionService from "../service/sessionService";
 import UserDto from "../model/dto/UserDto";
-import accountService from "../services/accountService";
+import accountService from "../service/accountService";
 
 class Account {
     private _logger = logger("Auth");

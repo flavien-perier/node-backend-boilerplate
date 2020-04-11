@@ -1,5 +1,5 @@
-import database from "../services/database";
-import logger from "../services/logger";
+import database from "../service/database";
+import logger from "../service/logger";
 import UserOrm from "../model/orm/UserOrm";
 
 class UserRepository {
@@ -14,7 +14,7 @@ class UserRepository {
                     if (users.length == 1) {
                         resolve(users[0] as UserOrm);
                     } else {
-                        this._logger.error(`No user Found with id: ${id}`);
+                        this._logger.warn(`No user Found with id: ${id}`);
                         resolve(null);
                     }
                 });
@@ -30,7 +30,7 @@ class UserRepository {
                     if (users.length == 1) {
                         resolve(users[0] as UserOrm);
                     } else {
-                        this._logger.error(`No user Found with name: ${name}`);
+                        this._logger.warn(`No user Found with name: ${name}`);
                         resolve(null);
                     }
                 });
