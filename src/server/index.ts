@@ -11,75 +11,57 @@ import HttpError from "../error/HttpError";
 import HttpInternalServerError from "../error/HttpInternalServerError";
 import HttpNotFoundError from "../error/HttpNotFoundError";
 import BadRequestInformations from "../model/BadRequestInformations";
+import account from "./account";
+import api from "./api";
 
-class Server {
-    private _logger = logger("Server");
-    private _app: express.Express;
-    private _server: http.Server;
+const _logger = logger("Server");
+const app = express();
 
-    constructor() {
-        this._app = express();
+app.use(bodyParser.json());
+app.use(helmet());
 
-        this._app.use(bodyParser.json());
-        this._app.use(helmet());
+// log request
+app.use((req, res, next) => {
+    const ip = req.headers["x-real-ip"] || req.connection.remoteAddress;
+    const userAgent = req.get("User-Agent");
+    const method = req.method;
+    const url = req.originalUrl;
 
-        // log request
-        this._app.use((req, res, next) => {
-            const ip = req.headers["x-real-ip"] || req.connection.remoteAddress;
-            const userAgent = req.get("User-Agent");
-            const method = req.method;
-            const url = req.originalUrl;
+    _logger.http(`${method}: ${url}`, {ip, userAgent, method, url});
+    next();
+});
 
-            this._logger.http(`${method}: ${url}`, {ip, userAgent, method, url});
-            next();
-        });
+const server: Promise<http.Server> = new OpenApiValidator({
+    apiSpec: yaml.safeLoad(fs.readFileSync("swagger.yaml", "utf8")),
+    validateRequests: true,
+    validateResponses: true,
+    validateSecurity: true
+}).install(app).then(() => {
+    // include rooters
+    app.use("/account", account);
+    app.use("/api", api);
 
-        new OpenApiValidator({
-            apiSpec: yaml.safeLoad(fs.readFileSync("swagger.yaml", "utf8")),
-            validateRequests: true,
-            validateResponses: true,
-            validateSecurity: true
-        }).install(this._app);
-    }
+    // default response
+    app.use((req, res, next) => {
+        next(new HttpNotFoundError("Not found"));
+    });
 
-    public get app() {
-        return this._app;
-    }
+    // error catching
+    app.use((err, req, res, next) => {
+        if (err instanceof HttpError) {
+            err.apply(res);
+        } else if (err.status && err.message && err.errors) {
+            _logger.warn("Swagger compliance issue", {error: err.message});
+            res.status(err.status).json(new BadRequestInformations(err.message, err.errors));
+        } else {
+            _logger.error("Internal server error", {errorMessage: err.message || err});
+            new HttpInternalServerError("Internal server error").apply(res);
+        }
+    });
 
-    public addRouter(route: string, router: express.Router) {
-        this._logger.info(`Add router ${route}`);
-        this._app.use(route, router);
-    }
+    return app.listen(configuration.port, () => {
+        _logger.info(`Application start on port ${configuration.port}`);
+    });
+});
 
-    public start() {
-        // default response
-        this._app.use((req, res, next) => {
-            next(new HttpNotFoundError("Not found"));
-        });
-
-        // error catching
-        this._app.use((err, req, res, next) => {
-            if (err instanceof HttpError) {
-                err.apply(res);
-            } else if (err.status && err.message && err.errors) {
-                this._logger.warn("Swagger compliance issue", {error: err.message});
-                res.status(err.status).json(new BadRequestInformations(err.message, err.errors));
-            } else {
-                this._logger.error("Internal server error", {errorMessage: err.message || err});
-                new HttpInternalServerError("Internal server error").apply(res);
-            }
-        });
- 
-        this._server = this._app.listen(configuration.port, () => {
-            this._logger.info(`Application start on port ${configuration.port}`);
-        });
-    }
-
-    public stop() {
-        this._server.close();
-    }
-}
-
-const server = new Server();
-
-export default server;
+export { server, app };

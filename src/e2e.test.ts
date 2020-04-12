@@ -1,27 +1,20 @@
 import * as supertest from "supertest";
-import server from "./server";
+import { server, app } from "./server";
 import userRepository from "./repositorie/userRepository";
-import account from "./server/account";
-import api from "./server/api";
+import * as http from "http";
 
 describe("e2e tests", () => {
     const USER_NAME = "user-test";
     const PASSWORD = "PASSWORD";
+    var api: http.Server;
 
-    beforeAll(() => new Promise((resolve, reject) => {
-        try {
-            account.load();
-            api.load();
-
-            server.start();
-            resolve();
-        } catch (err) {
-            reject(err);
-        }
-    }));
+    beforeAll(async done => {
+        api = await server;
+        done();
+    });
     
     afterAll(() => {
-        server.stop();
+        api.close();
     });
 
     
@@ -30,7 +23,7 @@ describe("e2e tests", () => {
     });
 
     it("Create user", done => {
-        supertest(server.app)
+        supertest(app)
             .post("/account")
             .send(JSON.stringify({"name": USER_NAME, "password": PASSWORD}))
             .set("Content-Type", "application/json")
@@ -43,7 +36,7 @@ describe("e2e tests", () => {
     });
 
     it("Login user", done => {
-        supertest(server.app)
+        supertest(app)
             .post("/account")
             .send(JSON.stringify({"name": USER_NAME, "password": PASSWORD}))
             .set("Content-Type", "application/json")
@@ -51,7 +44,7 @@ describe("e2e tests", () => {
             .end((err, res) => {
                 expect(err).toBeNull();
                 
-                supertest(server.app)
+                supertest(app)
                     .get("/account/login")
                     .send(JSON.stringify({"name": USER_NAME, "password": PASSWORD}))
                     .set("Authorization", `Basic ${Buffer.from(USER_NAME + ":" + PASSWORD).toString("base64")}`)
@@ -64,7 +57,7 @@ describe("e2e tests", () => {
                         const token = res.body.token;
                         console.log(token)
 
-                        supertest(server.app)
+                        supertest(app)
                             .get("/api/ping")
                             .set("Content-Type", "application/json")
                             .set("Authorization", `Bearer ${token}`)
