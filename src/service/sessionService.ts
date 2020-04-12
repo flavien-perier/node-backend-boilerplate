@@ -11,6 +11,7 @@ import TokenDto from "../model/dto/TokenDto";
 class SessionService {
     private _logger = logger("SessionService");
     private _redisClient: redis.RedisClient;
+    private tokenGenerator = this.token();
 
     constructor() {
         this._redisClient = redis.createClient({
@@ -18,10 +19,12 @@ class SessionService {
         });
     }
 
+    private *token() {
+        return crypto.randomBytes(64).toString("hex");
+    }
+
     public createSession(user: UserDto): TokenDto {
-        const token = crypto.createHmac("sha512", configuration.salt)
-                            .update(user.name + user.password + new Date().getTime() + (Math.random()))
-                            .digest("hex");
+        const token = this.tokenGenerator.next().value;
         
         const userSession = new UserSession(user.name);
         this._redisClient.set(token, JSON.stringify(userSession), "EX", 1800);

@@ -4,7 +4,7 @@ import configuration from "./configuration";
 import logger from "./logger";
 import HttpForbidenError from "../error/HttpForbidenError";
 import UserInformationDto from "../model/dto/UserInformationDto";
-import userOrmMapper from "../model/mapper/userOrmMapper"
+import userOrmMapper from "../model/mapper/userMapper"
 
 class AccountService {
     private _logger = logger("SessionService");

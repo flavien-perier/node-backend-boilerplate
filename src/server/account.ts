@@ -5,9 +5,8 @@ import accountService from "../service/accountService";
 import HttpUnauthorizedError from "../error/HttpUnauthorizedError";
 import * as express from "express";
 
-const router = express.Router();
-
 const _logger = logger("account");
+const router = express.Router();
 
 router.get("/login", async (req, res, next) => {
     try {
