@@ -29,6 +29,7 @@ npm start
 
 ## Environment variables
 
+- `NODE_ID`: Node identifier (random if empty)
 - `PORT`: Server port
 - `LOG`: Log level
 - `SALT`: Password salt

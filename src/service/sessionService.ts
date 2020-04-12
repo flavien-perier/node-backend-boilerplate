@@ -23,7 +23,8 @@ class SessionService {
         let i = 0;
         while (true) {
             yield Buffer.from(JSON.stringify({
-                id: i++,
+                nodeId: configuration.nodeId,
+                tokenId: i++,
                 code: crypto.randomBytes(32).toString("hex"),
                 date: new Date().getTime()
             })).toString("base64");

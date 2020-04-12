@@ -1,4 +1,5 @@
 application:
+  nodeId: node0
   logLevel: debug
   port: 8080
   salt: nwgDRzL2nvVGToPkEEU8Ba582JxSqPyadQSr4UEN
