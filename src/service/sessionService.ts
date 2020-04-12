@@ -20,17 +20,29 @@ class SessionService {
     }
 
     private *token() {
-        return crypto.randomBytes(64).toString("hex");
+        let i = 0;
+        while (true) {
+            yield Buffer.from(JSON.stringify({
+                id: i++,
+                code: crypto.randomBytes(32).toString("hex"),
+                date: new Date().getTime()
+            })).toString("base64");
+        }
     }
 
     public createSession(user: UserDto): TokenDto {
-        const token = this.tokenGenerator.next().value;
+        const token = this.tokenGenerator.next(user.name);
         
-        const userSession = new UserSession(user.name);
-        this._redisClient.set(token, JSON.stringify(userSession), "EX", 1800);
-        this._logger.debug(`Associates the "${user.name}" user with the token "${token}".`);
-        return new TokenDto(token);
-    } 
+        if (token.value) {
+            const userSession = new UserSession(user.name);
+            this._redisClient.set(token.value, JSON.stringify(userSession), "EX", 1800);
+            this._logger.debug(`Associates the "${user.name}" user with the token "${token}".`);
+            return new TokenDto(token.value);
+        }
+
+        this._logger.error("Token generator error");
+        throw new HttpInternalServerError("Token generator error");
+    }
 
     public loadSession(token: string): Promise<UserSession> {
         return new Promise((resolve, reject) => {
