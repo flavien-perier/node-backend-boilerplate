@@ -1,24 +1,27 @@
 import { OpenApiValidator } from "express-openapi-validator";
-import configuration from "../service/configuration";
-import logger from "../service/logger";
 import * as express from "express";
+import * as compression from "compression";
 import * as bodyParser from "body-parser";
 import * as helmet from "helmet";
 import * as http from "http";
 import * as yaml from "js-yaml";
 import * as fs from "fs";
+import configuration from "../service/configuration";
+import logger from "../service/logger";
 import HttpError from "../error/HttpError";
 import HttpInternalServerError from "../error/HttpInternalServerError";
 import HttpNotFoundError from "../error/HttpNotFoundError";
 import BadRequestInformations from "../model/BadRequestInformations";
 import account from "./account";
-import api from "./api";
+import auth from "./auth";
+import ping from "./ping";
 
-const _logger = logger("Server");
+const _logger = logger("server");
 const app = express();
 
 app.use(bodyParser.json());
 app.use(helmet());
+app.use(compression());
 
 // log request
 app.use((req, res, next) => {
@@ -38,8 +41,9 @@ const server: Promise<http.Server> = new OpenApiValidator({
     validateSecurity: true
 }).install(app).then(() => {
     // include rooters
+    app.use("/ping", ping)
     app.use("/account", account);
-    app.use("/api", api);
+    app.use("/", auth);
 
     // default response
     app.use((req, res, next) => {
@@ -60,7 +64,7 @@ const server: Promise<http.Server> = new OpenApiValidator({
     });
 
     return app.listen(configuration.port, () => {
-        _logger.info(`Application start on port ${configuration.port}`);
+        _logger.info(`Application start on port ${configuration.port} with id "${configuration.nodeId}"`, {port: configuration.port, nodeId: configuration.nodeId});
     });
 });
 

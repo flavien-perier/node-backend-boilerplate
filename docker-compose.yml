@@ -25,6 +25,9 @@ services:
     command: npm install
     volumes:
       - .:/opt/app
+    environment:
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+      POSTGRES_URL: psql://admin:${POSTGRES_PASSWORD}@postgres:5432/admin
 
   app-dev:
     build: .
@@ -35,6 +38,9 @@ services:
       - .:/opt/app
     ports:
       - 127.0.0.1:8080:8080
+    environment:
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+      POSTGRES_URL: psql://admin:${POSTGRES_PASSWORD}@postgres:5432/admin
 
   app-test:
     build: .
@@ -43,6 +49,9 @@ services:
     restart: always
     volumes:
       - .:/opt/app
+    environment:
+      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
+      POSTGRES_URL: psql://admin:${POSTGRES_PASSWORD}@postgres:5432/admin
 
 volumes:
   db-postgres:

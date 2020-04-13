@@ -1,7 +1,6 @@
 application:
-  nodeId: node0
   logLevel: debug
   port: 8080
   salt: nwgDRzL2nvVGToPkEEU8Ba582JxSqPyadQSr4UEN
-  redisUrl: redis://:password@redis:6379
-  postgresUrl: psql://admin:password@postgres:5432/admin
+  redisUrl: redis://:drowssap123!@redis:6379
+  postgresUrl: psql://admin:drowssap123!@postgres:5432/admin

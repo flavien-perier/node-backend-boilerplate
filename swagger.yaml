@@ -68,18 +68,62 @@ paths:
       security:
       - client: []
           
-  /api/ping:
+  /ping:
     get:
       tags:
       - Api
-      summary: Authentification
+      summary: Simple test function
       responses:
         200:
           description: OK
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/Ping'
+                type: object
+                required:
+                - ping
+                properties:
+                  ping:
+                    type: string
+                    enum:
+                    - OK
+        400:
+          description: Bad request
+        401:
+          description: Unauthorized
+
+  /sum:
+    get:
+      tags:
+      - Api
+      summary: Sum 2 values
+      parameters:
+      - name: value1
+        in: query
+        description: Value 1
+        required: true
+        schema:
+          type: integer
+          format: int64
+      - name: value2
+        in: query
+        description: Value 2
+        required: true
+        schema:
+          type: integer
+          format: int64
+      responses:
+        200:
+          description: OK
+          content:
+            application/json:
+              schema:
+                type: object
+                required:
+                - result
+                properties:
+                  result:
+                    type: number
         400:
           description: Bad request
         401:
@@ -119,16 +163,6 @@ components:
         token:
           type: string
           description: User authentication token
-          
-    Ping:
-      type: object
-      required:
-      - ping
-      properties:
-        ping:
-          type: string
-          enum:
-          - pong
 
   securitySchemes:
     client:

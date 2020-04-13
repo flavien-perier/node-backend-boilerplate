@@ -8,6 +8,7 @@ LABEL description="NodeJs backend"
 WORKDIR /opt/app
 COPY . .
 
+RUN apk add --no-cache python3 gcc make
 RUN rm -Rf node_modules
 RUN npm install && \
     npm run build && \

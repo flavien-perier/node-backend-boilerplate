@@ -1,5 +1,6 @@
 import sessionService from "../../service/sessionService";
 import * as express from "express";
+import sumRouter from "./sum";
 
 const router = express.Router();
 
@@ -13,8 +14,6 @@ router.use(async (req, res, next) => {
     }
 });
 
-router.get("/ping", (req, res) => {
-    res.json({ping: "pong"});
-});
+router.use("/sum", sumRouter);
 
 export default router;
