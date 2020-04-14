@@ -20,7 +20,7 @@ services:
       - db-redis:/data
 
   app-install:
-    build: .
+    build: ./Dockerfile.dev
     container_name: app-install
     command: npm install
     volumes:
@@ -30,7 +30,7 @@ services:
       POSTGRES_URL: psql://admin:${POSTGRES_PASSWORD}@postgres:5432/admin
 
   app-dev:
-    build: .
+    build: ./Dockerfile.dev
     container_name: app-dev
     command: npm run dev
     restart: always
@@ -43,7 +43,7 @@ services:
       POSTGRES_URL: psql://admin:${POSTGRES_PASSWORD}@postgres:5432/admin
 
   app-test:
-    build: .
+    build: ./Dockerfile.dev
     container_name: app-test
     command: npm test
     restart: always

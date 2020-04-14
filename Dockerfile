@@ -24,6 +24,7 @@ ARG DOCKER_GID=500
 WORKDIR /opt/app
 
 COPY --from=builder /opt/app .
+ENV NODE_ENV production
 
 RUN addgroup -g $DOCKER_GID app && \
     adduser -G app -D -H -h /opt/app -u $DOCKER_UID app && \

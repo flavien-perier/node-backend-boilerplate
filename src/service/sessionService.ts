@@ -37,7 +37,7 @@ class SessionService {
         if (token.value) {
             const userSession = new UserSession(user.name);
             this._redisClient.set(token.value, JSON.stringify(userSession), "EX", 1800);
-            this._logger.debug(`Associates the "${user.name}" user with the token "${token}".`);
+            this._logger.debug(`Associates the "${user.name}" user with the token "${token.value}".`);
             return new TokenDto(token.value);
         }
 

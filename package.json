@@ -8,10 +8,12 @@
   "scripts": {
     "build": "node-gyp rebuild && tsc",
     "start": "node dist/index.js",
-    "test": "nodemon -e ts,json,yaml,yml --exec 'ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json'",
-    "dev": "nodemon -e ts,json,yaml,yml src/index.ts --exec ts-node"
+    "dev": "nodemon -e ts,json,yaml,yml,cc src/index.ts --exec 'node-gyp rebuild && ts-node'",
+    "test": "nodemon -e ts,json,yaml,yml,cc --exec 'node-gyp rebuild && ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json'",
+    "stress": "artillery run artillery.yaml"
   },
   "dependencies": {
+    "bindings": "^1.5.0",
     "body-parser": "^1.19.0",
     "compression": "^1.7.4",
     "crypto": "^1.0.1",
@@ -37,10 +39,10 @@
     "@types/redis": "^2.8.17",
     "@types/supertest": "^2.0.8",
     "@types/winston": "^2.4.4",
-    "bindings": "^1.5.0",
+    "artillery": "^1.6.0",
     "jasmine": "^3.5.0",
-    "nodemon": "^2.0.3",
     "node-addon-api": "^2.0.0",
+    "nodemon": "^2.0.3",
     "supertest": "^4.0.2",
     "ts-node": "^8.8.2",
     "typescript": "^3.8.3"
