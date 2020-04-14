@@ -10,7 +10,7 @@ ARG DOCKER_GID=500
 WORKDIR /opt/app
 COPY . .
 
-RUN apk add --no-cache python3 gcc make
+RUN apk add --no-cache python3 gcc g++ make
 RUN npm install
 
 RUN addgroup -g $DOCKER_GID app && \
