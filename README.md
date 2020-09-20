@@ -33,7 +33,9 @@ npm start
 - `PORT`: Server port
 - `LOG`: Log level
 - `SALT`: Password salt
+- `JWT_TOKEN`: JWT token
 - `REDIS_URL`: Redis url
+- `POSTGRES_URL`: PostgreSQL url
 
 ## Usage
 

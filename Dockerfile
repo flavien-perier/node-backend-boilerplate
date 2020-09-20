@@ -4,27 +4,35 @@ LABEL maintainer="Flavien PERIER <perier@flavien.io>"
 LABEL version="1.0"
 LABEL description="NodeJs backend"
 
-
 WORKDIR /opt/app
 COPY . .
 
-RUN apk add --no-cache python3 gcc g++ make
-RUN rm -Rf node_modules
-RUN npm install && \
-    npm run build && \
-    chmod -R 750 /opt/app
-RUN rm -Rf node_modules
-RUN npm install --production
+RUN apk add --no-cache python3 gcc g++ make && \
+    rm -Rf node_modules && \
+    chmod -R 750 /opt/app && \
+    chown -R root:root /opt/app && \
+    npm run init && \
+    rm -Rf node_modules && \
+    npm install --production
 
 FROM node:lts-alpine
 
 ARG DOCKER_UID=500
 ARG DOCKER_GID=500
 
+ENV NODE_ENV=production
+
+ENV NODE_ID=
+ENV PORT=8080
+ENV LOG=debug
+ENV SALT=salt
+ENV JWT_TOKEN=jwttoken
+ENV REDIS_URL=redis://:password@redis:6379
+ENV POSTGRES_URL=psql://admin:password@postgres:5432/admin
+
 WORKDIR /opt/app
 
 COPY --from=builder /opt/app .
-ENV NODE_ENV production
 
 RUN addgroup -g $DOCKER_GID app && \
     adduser -G app -D -H -h /opt/app -u $DOCKER_UID app && \

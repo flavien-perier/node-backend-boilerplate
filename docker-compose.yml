@@ -19,18 +19,6 @@ services:
     volumes:
       - db-redis:/data
 
-  app-install:
-    build: 
-      context: ./
-      dockerfile: Dockerfile.dev
-    container_name: app-install
-    command: npm install
-    volumes:
-      - ./:/opt/app
-    environment:
-      REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
-      POSTGRES_URL: psql://admin:${POSTGRES_PASSWORD}@postgres:5432/admin
-
   app-dev:
     build: 
       context: ./
@@ -39,7 +27,8 @@ services:
     command: npm run dev
     restart: always
     volumes:
-      - ./:/opt/app
+      - ./src:/opt/app/src
+      - ./gyp:/opt/app/gyp
     ports:
       - 127.0.0.1:8080:8080
     environment:
@@ -54,7 +43,8 @@ services:
     command: npm test
     restart: always
     volumes:
-      - ./:/opt/app
+      - ./src:/opt/app/src
+      - ./gyp:/opt/app/gyp
     environment:
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
       POSTGRES_URL: psql://admin:${POSTGRES_PASSWORD}@postgres:5432/admin

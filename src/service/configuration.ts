@@ -8,17 +8,19 @@ class Configuration {
     private _logLevel: string;
     private _port: string;
     private _salt: string;
+    private _jwtToken: string;
     private _redisUrl: string
     private _postgresUrl: string;
 
     constructor() {
-        const staticConfiguration = yaml.safeLoad(fs.readFileSync("configuration.yaml", "utf8"));
+        const staticConfiguration: any = yaml.safeLoad(fs.readFileSync("configuration.yaml", "utf8"));
 
         this._applicationVersion = require("../../package.json").version
         this._nodeId = process.env.NODE_ID || staticConfiguration.application.nodeId || crypto.randomBytes(10).toString("hex");
         this._logLevel = process.env.LOG || staticConfiguration.application.logLevel;
         this._port = process.env.PORT || staticConfiguration.application.port;
         this._salt = process.env.SALT || staticConfiguration.application.salt;
+        this._jwtToken = process.env.JWT_TOKEN || staticConfiguration.application.salt;
         this._redisUrl = process.env.REDIS_URL || staticConfiguration.application.redisUrl;
         this._postgresUrl = process.env.POSTGRES_URL || staticConfiguration.application.postgresUrl;
     }
@@ -38,9 +40,13 @@ class Configuration {
     public get port() {
         return this._port;
     }
-
+    
     public get salt() {
         return this._salt;
+    }
+        
+    public get jwtToken() {
+        return this._jwtToken;
     }
 
     public get redisUrl() {
