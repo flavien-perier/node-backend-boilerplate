@@ -24,10 +24,12 @@ class SessionService {
 
     public createSession(user: UserDto): TokenDto {
         const redisKey = crypto.randomBytes(16).toString("hex");
-        const token = jwt.sign(new JwtDto(redisKey),  configuration.jwtToken, { expiresIn: this.TOKEN_TTL });
+        const token = jwt.sign({
+            token: redisKey
+        } as JwtDto, configuration.jwtToken, { expiresIn: this.TOKEN_TTL });
 
         const userSession = new UserSession(user.name);
-        this._redisClient.set(token, JSON.stringify(userSession), "EX", this.TOKEN_TTL);
+        this._redisClient.set(redisKey, JSON.stringify(userSession), "EX", this.TOKEN_TTL);
         this._logger.debug(`Associates the user "${user.name}" with the token "${token}".`);
         return new TokenDto(token);
     }

@@ -15,5 +15,6 @@ RUN apk add --no-cache python3 gcc g++ make && \
 
 VOLUME /opt/app/src
 VOLUME /opt/app/gyp
+VOLUME /opt/app/swagger.yaml
 
 EXPOSE 8080

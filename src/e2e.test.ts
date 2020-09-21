@@ -66,7 +66,7 @@ describe("e2e tests", () => {
                         .expect(200)
                         .end((err, res) => {
                             expect(err).toBeNull();
-                            expect(res.body.token).toMatch(/^[0-9a-zA-Z=]{128,1024}$/);
+                            expect(res.body.token).toMatch(/^[0-9a-zA-Z=_\-\.]{128,1024}$/);
     
                             token = res.body.token;
                             done();

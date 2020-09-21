@@ -29,6 +29,7 @@ services:
     volumes:
       - ./src:/opt/app/src
       - ./gyp:/opt/app/gyp
+      - ./swagger.yaml:/opt/app/swagger.yaml
     ports:
       - 127.0.0.1:8080:8080
     environment:
@@ -45,6 +46,7 @@ services:
     volumes:
       - ./src:/opt/app/src
       - ./gyp:/opt/app/gyp
+      - ./swagger.yaml:/opt/app/swagger.yaml
     environment:
       REDIS_URL: redis://:${REDIS_PASSWORD}@redis:6379
       POSTGRES_URL: psql://admin:${POSTGRES_PASSWORD}@postgres:5432/admin

@@ -56,7 +56,7 @@ curl --request POST \
 ```bash
 curl --request GET \
   --url http://127.0.0.1:8080/account/login \
-  --header 'authorization: Basic ZmxhdmllbjpwYXNzd29yZA==' \
+  --header 'authorization: Basic dXNlcjpwYXNzd29yZA==' \
   --header 'content-type: application/json'
 ```
 
@@ -64,6 +64,6 @@ curl --request GET \
 
 ```bash
 curl --request GET \
-  --url http://127.0.0.1:8080/api/ping \
+  --url http://127.0.0.1:8080/ping \
   --header 'authorization: Bearer ********'
 ```
