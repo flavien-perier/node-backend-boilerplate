@@ -6,10 +6,9 @@
   "license": "MIT",
   "gypfile": true,
   "scripts": {
-    "build-ts": "tsc",
+    "build-ts": "(tsc)",
     "build-gyp": "rm -Rf ./build && node-gyp configure && node-gyp build",
-    "build": "npm run build-gyp && (npm run build-ts)",
-    "init": "(npm install) && npm run build",
+    "build": "npm run build-gyp && npm run build-ts",
     "start": "node dist/index.js",
     "dev": "nodemon -e ts,json,yaml,yml,cc src/index.ts --exec 'npm run build-gyp && ts-node'",
     "test": "nodemon -e ts,json,yaml,yml,cc --exec 'npm run build-gyp && ts-node node_modules/jasmine/bin/jasmine --config=jasmine.json'",

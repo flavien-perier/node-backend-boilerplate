@@ -4,14 +4,16 @@ LABEL maintainer="Flavien PERIER <perier@flavien.io>"
 LABEL version="1.0"
 LABEL description="NodeJs backend"
 
+RUN apk add --no-cache python3 gcc g++ make
+
 WORKDIR /opt/app
 COPY . .
 
-RUN apk add --no-cache python3 gcc g++ make && \
-    rm -Rf node_modules && \
+RUN rm -Rf node_modules && \
     chmod -R 750 /opt/app && \
     chown -R root:root /opt/app && \
-    npm run init && \
+    (npm install) && \
+    npm run build && \
     rm -Rf node_modules && \
     npm install --production
 
