@@ -17,7 +17,7 @@ const colors = {
     http: "blue",
     info: "green",
     debug: "cyan"
-}
+};
 
 export default function logger(label: string) {
     winston.addColors(colors);

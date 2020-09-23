@@ -41,7 +41,7 @@ const server: Promise<http.Server> = new OpenApiValidator({
     validateSecurity: true
 }).install(app).then(() => {
     // include rooters
-    app.use("/ping", ping)
+    app.use("/ping", ping);
     app.use("/account", account);
     app.use("/", auth);
 
