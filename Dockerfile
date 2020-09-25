@@ -15,7 +15,8 @@ RUN rm -Rf node_modules && \
     (npm install) && \
     npm run build && \
     rm -Rf node_modules && \
-    npm install --production
+    npm install --production && \
+    rm -Rf src gyp .gitignore artillery.js artillery.yaml binding.gyp docker-compose.yml Dockerfile Dockerfile.dev jasmine.json tsconfig.json
 
 FROM node:lts-alpine
 
