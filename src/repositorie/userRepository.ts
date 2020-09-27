@@ -1,5 +1,5 @@
-import database from "../service/database";
-import logger from "../service/logger";
+import database from "../configuration/database";
+import logger from "../configuration/logger";
 import UserOrm from "../model/orm/UserOrm";
 import HttpNotFoundError from "../error/HttpNotFoundError";
 

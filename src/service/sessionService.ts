@@ -1,10 +1,10 @@
 import * as redis from "redis";
 import  * as crypto from "crypto";
-import configuration from "./configuration";
+import configuration from "../configuration/configuration";
 import UserDto from "../model/dto/UserDto";
 import JwtDto from "../model/dto/JwtDto";
 import UserSession from "../model/UserSession";
-import logger from "./logger";
+import logger from "../configuration/logger";
 import HttpInternalServerError from "../error/HttpInternalServerError";
 import HttpUnauthorizedError from "../error/HttpUnauthorizedError";
 import TokenDto from "../model/dto/TokenDto";

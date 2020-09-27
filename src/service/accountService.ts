@@ -1,7 +1,7 @@
 import * as crypto from "crypto";
 import userRepository from "../repositorie/userRepository";
-import configuration from "./configuration";
-import logger from "./logger";
+import configuration from "../configuration/configuration";
+import logger from "../configuration/logger";
 import HttpForbidenError from "../error/HttpForbidenError";
 import UserInformationDto from "../model/dto/UserInformationDto";
 import userOrmMapper from "../model/mapper/userMapper"

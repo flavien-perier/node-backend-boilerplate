@@ -1,4 +1,4 @@
-import logger from "../service/logger";
+import logger from "../configuration/logger";
 import sessionService from "../service/sessionService";
 import UserDto from "../model/dto/UserDto";
 import accountService from "../service/accountService";
