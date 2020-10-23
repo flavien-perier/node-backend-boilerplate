@@ -1,3 +1,5 @@
+![license](https://badgen.net/github/license/flavien-perier/node-backend-boilerplate)
+
 # Node Backend Boilerplate
 
 ## Commands
