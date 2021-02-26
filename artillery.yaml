@@ -15,25 +15,26 @@ config:
     - duration: 60
       arrivalRate: 500
 scenarios:
-  - flow:
-    - function: generateRandomData
-    - post:
-        url: /account
-        json:
-          name: "{{ name }}"
-          password: "{{ password }}"
-    - get:
-        url: /account/login
-        headers:
-          Authorization: Basic {{ basic }}
-        capture:
-          json: $.token
-          as: bearer
-    - get:
-        url: /sum?value1={{ value1 }}&value2={{ value2 }}
-        headers:
-          Authorization: Bearer {{ bearer }}
-        capture:
-          json: $.result
-          as: result
-    #- log: "{{ value1 }} + {{ value2 }} = {{ result }}"
+  - name: Create account + Auth + Sum
+    flow:
+      - function: generateRandomData
+      - post:
+          url: /account
+          json:
+            name: "{{ name }}"
+            password: "{{ password }}"
+      - get:
+          url: /account/login
+          headers:
+            Authorization: Basic {{ basic }}
+          capture:
+            json: $.token
+            as: bearer
+      - get:
+          url: /sum?value1={{ value1 }}&value2={{ value2 }}
+          headers:
+            Authorization: Bearer {{ bearer }}
+          capture:
+            json: $.result
+            as: result
+      #- log: "{{ value1 }} + {{ value2 }} = {{ result }}"

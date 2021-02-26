@@ -13,7 +13,7 @@ class Configuration {
     private _postgresUrl: string;
 
     constructor() {
-        const staticConfiguration: any = yaml.safeLoad(fs.readFileSync("configuration.yaml", "utf8"));
+        const staticConfiguration: any = yaml.load(fs.readFileSync("configuration.yaml", "utf8"));
 
         this._applicationVersion = require("../../package.json").version;
         this._nodeId = process.env.NODE_ID || staticConfiguration.application.nodeId || crypto.randomBytes(10).toString("hex");
