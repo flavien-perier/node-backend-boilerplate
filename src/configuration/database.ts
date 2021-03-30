@@ -1,9 +1,9 @@
-import * as knex from "knex";
+import { knex, Knex } from "knex";
 import configuration from "./configuration";
 import logger from "./logger";
 
 class Database {
-    private _knex: knex;
+    private _knex: Knex;
     private _logger = logger("Database");
 
     constructor() {
