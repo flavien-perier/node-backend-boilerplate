@@ -48,7 +48,7 @@ paths:
         403:
           description: Forbidden
           content: {}
-        
+
   /account/login:
     get:
       tags:
@@ -67,7 +67,7 @@ paths:
           description: Unauthorized
       security:
       - client: []
-          
+
   /ping:
     get:
       tags:
@@ -168,7 +168,7 @@ components:
     client:
       type: http
       scheme: basic
-  
+
     bearer:
       type: http
       scheme: bearer

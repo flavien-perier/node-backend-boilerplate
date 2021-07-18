@@ -9,14 +9,13 @@ RUN apk add --no-cache python3 gcc g++ make
 WORKDIR /opt/app
 COPY . .
 
-RUN rm -Rf node_modules && \
-    chmod -R 750 /opt/app && \
+RUN chmod -R 750 /opt/app && \
     chown -R root:root /opt/app && \
-    (npm install) && \
+    npm install && \
     npm run build && \
     rm -Rf node_modules && \
     npm install --production && \
-    rm -Rf src gyp .gitignore artillery.js artillery.yaml binding.gyp docker-compose.yml Dockerfile Dockerfile.dev jasmine.json tsconfig.json
+    rm -Rf src gyp artillery.js artillery.yaml binding.gyp jasmine.json tsconfig.json swagger.yaml
 
 FROM node:lts-alpine
 

@@ -1,6 +1,8 @@
 Dockerfile
+Dockerfile.dev
 .gitignore
 README.md
+docker-compose.yml
 
 .idea
 .cache

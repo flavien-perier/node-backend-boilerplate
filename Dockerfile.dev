@@ -9,10 +9,9 @@ RUN apk add --no-cache python3 gcc g++ make
 WORKDIR /opt/app
 COPY . .
 
-RUN rm -Rf node_modules && \
-    chmod -R 750 /opt/app && \
+RUN chmod -R 750 /opt/app && \
     chown -R root:root /opt/app && \
-    (npm install) && \
+    npm install && \
     npm run build && \
     rm -Rf gyp src swagger.yaml
 
