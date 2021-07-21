@@ -1,46 +1,47 @@
 FROM node:lts-alpine as builder
 
-LABEL maintainer="Flavien PERIER <perier@flavien.io>"
-LABEL version="1.0"
-LABEL description="NodeJs backend"
-
-RUN apk add --no-cache python3 gcc g++ make
-
 WORKDIR /opt/app
 COPY . .
 
-RUN chmod -R 750 /opt/app && \
-    chown -R root:root /opt/app && \
+RUN apk add --no-cache python3 gcc g++ make && \
     npm install && \
     npm run build && \
     rm -Rf node_modules && \
-    npm install --production && \
-    rm -Rf src gyp artillery.js artillery.yaml binding.gyp jasmine.json tsconfig.json swagger.yaml
+    npm install --production
 
 FROM node:lts-alpine
 
-ARG DOCKER_UID=500
-ARG DOCKER_GID=500
+LABEL maintainer="Flavien PERIER <perier@flavien.io>" \
+      version="1.0.0" \
+      description="NodeJs backend"
 
-ENV NODE_ENV=production
+ARG DOCKER_UID="500"
+ARG DOCKER_GID="500"
 
-ENV NODE_ID=
-ENV PORT=8080
-ENV LOG=debug
-ENV SALT=salt
-ENV JWT_TOKEN=jwttoken
-ENV REDIS_URL=redis://:password@redis:6379
-ENV POSTGRES_URL=psql://admin:password@postgres:5432/admin
+ENV NODE_ENV="production"
+ENV NODE_ID=""
+ENV PORT="8080"
+ENV LOG="debug"
+ENV SALT="salt"
+ENV JWT_TOKEN="jwttoken"
+ENV REDIS_URL="redis://:password@redis:6379"
+ENV POSTGRES_URL="psql://admin:password@postgres:5432/admin"
 
 WORKDIR /opt/app
-
-COPY --from=builder /opt/app .
+COPY --from=builder /opt/app/dist ./dist
+COPY --from=builder /opt/app/build ./build
+COPY --from=builder /opt/app/swagger.yaml ./swagger.yaml
+COPY --from=builder /opt/app/configuration.yaml ./configuration.yaml
+COPY --from=builder /opt/app/package.json ./package.json
+COPY --from=builder /opt/app/node_modules ./node_modules
+COPY --from=builder /opt/app/LICENSE ./LICENSE
 
 RUN addgroup -g $DOCKER_GID app && \
     adduser -G app -D -H -h /opt/app -u $DOCKER_UID app && \
     chown -R app:app /opt/app
 
 USER app
+
 EXPOSE 8080
 
 CMD npm start

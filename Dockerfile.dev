@@ -1,22 +1,16 @@
 FROM node:lts-alpine as builder
 
-LABEL maintainer="Flavien PERIER <perier@flavien.io>"
-LABEL version="1.0"
-LABEL description="NodeJs backend dev"
-
-RUN apk add --no-cache python3 gcc g++ make
+LABEL maintainer="Flavien PERIER <perier@flavien.io>" \
+      version="1.0.0" \
+      description="NodeJs backend dev"
 
 WORKDIR /opt/app
-COPY . .
-
-RUN chmod -R 750 /opt/app && \
-    chown -R root:root /opt/app && \
-    npm install && \
-    npm run build && \
-    rm -Rf gyp src swagger.yaml
-
 VOLUME /opt/app/src
 VOLUME /opt/app/gyp
-VOLUME /opt/app/swagger.yaml
+COPY . .
+
+RUN apk add --no-cache python3 gcc g++ make && \
+    npm install && \
+    npm run build
 
 EXPOSE 8080

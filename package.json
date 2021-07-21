@@ -23,7 +23,7 @@
     "helmet": "4.6.0",
     "js-yaml": "4.1.0",
     "jsonwebtoken": "8.5.1",
-    "knex": "0.95.6",
+    "knex": "0.95.7",
     "logform": "2.2.0",
     "node-addon-api": "4.0.0",
     "pg": "8.6.0",
