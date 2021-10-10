@@ -5,9 +5,9 @@ LABEL maintainer="Flavien PERIER <perier@flavien.io>" \
       description="NodeJs backend dev"
 
 WORKDIR /opt/app
-VOLUME /opt/app/src
-VOLUME /opt/app/gyp
-COPY . .
+VOLUME ["/opt/app/src", "/opt/app/gyp"]
+
+COPY --chown=root:root . .
 
 RUN apk add --no-cache python3 gcc g++ make && \
     npm install && \

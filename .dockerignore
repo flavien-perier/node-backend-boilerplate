@@ -2,6 +2,7 @@
 .cache
 .config
 .gitignore
+.dockerignore
 .npm
 build
 dist
