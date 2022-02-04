@@ -15,154 +15,154 @@ externalDocs:
   url: https://github.com/flavien-perier/nodeBackendBoilerplate/blob/master/README.md
 
 servers:
-- url: http://127.0.0.1:8080/
+  - url: http://127.0.0.1:8080/
 
 tags:
-- name: Account
-  description: User management
-- name: Api
-  description: Application
+  - name: Account
+    description: User management
+  - name: Api
+    description: Application
 
 paths:
   /account:
     post:
       tags:
-      - Account
-      summary: Create a user
+        - Account
+      summary: Create an account
       requestBody:
         description: User information on account creation
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: '#/components/schemas/Account'
         required: true
       responses:
-        201:
+        "201":
           description: Created
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserInformation'
-        400:
+                $ref: '#/components/schemas/AccountInformation'
+        "400":
           description: Bad request
-        403:
+        "403":
           description: Forbidden
           content: {}
 
   /account/login:
     get:
       tags:
-      - Account
+        - Account
       summary: Authentification
       responses:
-        200:
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/Token'
-        400:
+        "400":
           description: Bad Request
-        401:
+        "401":
           description: Unauthorized
       security:
-      - client: []
+        - client: []
 
   /ping:
     get:
       tags:
-      - Api
+        - Api
       summary: Simple test function
       responses:
-        200:
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
                 required:
-                - ping
+                  - ping
                 properties:
                   ping:
                     type: string
                     enum:
-                    - OK
-        400:
+                      - OK
+        "400":
           description: Bad request
-        401:
+        "401":
           description: Unauthorized
 
   /sum:
     get:
       tags:
-      - Api
+        - Api
       summary: Sum 2 values
       parameters:
-      - name: value1
-        in: query
-        description: Value 1
-        required: true
-        schema:
-          type: integer
-          format: int64
-      - name: value2
-        in: query
-        description: Value 2
-        required: true
-        schema:
-          type: integer
-          format: int64
+        - name: value1
+          in: query
+          description: Value 1
+          required: true
+          schema:
+            type: integer
+            format: int64
+        - name: value2
+          in: query
+          description: Value 2
+          required: true
+          schema:
+            type: integer
+            format: int64
       responses:
-        200:
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 type: object
                 required:
-                - result
+                  - result
                 properties:
                   result:
                     type: number
-        400:
+        "400":
           description: Bad request
-        401:
+        "401":
           description: Unauthorized
       security:
-      - bearer: []
+        - bearer: []
 
 components:
   schemas:
-    User:
+    Account:
       type: object
       required:
-      - name
-      - password
+        - name
+        - password
       properties:
         name:
           type: string
-          description: User name
+          description: Account name
         password:
           type: string
-          description: User password
+          description: Account password
 
-    UserInformation:
+    AccountInformation:
       type: object
       required:
-      - name
+        - name
       properties:
         name:
           type: string
-          description: User name
+          description: Account name
 
     Token:
       type: object
       required:
-      - token
+        - token
       properties:
         token:
           type: string
-          description: User authentication token
+          description: Account authentication token
 
   securitySchemes:
     client:

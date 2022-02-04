@@ -1,5 +1,5 @@
-import { server } from "./server";
-import databaseBuilder from "./configuration/databaseBuilder";
+import { server } from "./configuration/server";
+import databaseBuilder from "./configuration/database-builder";
 
 async function main() {
     await databaseBuilder.build();

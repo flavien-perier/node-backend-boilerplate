@@ -1,10 +1,10 @@
 import { knex, Knex } from "knex";
-import configuration from "./configuration";
+import configuration from "./environment";
 import logger from "./logger";
 
 class Database {
-    private _knex: Knex;
-    private _logger = logger("Database");
+    private readonly _knex: Knex;
+    private readonly _logger = logger("Database");
 
     constructor() {
         this._knex  = knex({

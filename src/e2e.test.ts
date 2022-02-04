@@ -1,6 +1,6 @@
 import * as supertest from "supertest";
-import { server, app } from "./server";
-import userRepository from "./repositorie/userRepository";
+import { server, app } from "./configuration/server";
+import userRepository from "./account/repository/account.repository";
 import * as http from "http";
 
 describe("e2e tests", () => {

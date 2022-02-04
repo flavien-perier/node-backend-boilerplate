@@ -41,7 +41,7 @@ npm start
 
 ## Usage
 
-- Create user:
+- Create account:
 
 ```bash
 curl --request POST \
